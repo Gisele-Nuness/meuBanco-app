@@ -96,10 +96,38 @@ export default StyleSheet.create({
   grafico: {
     width: 60,
     height: 60,
+    paddingHorizontal: 60,
+  },
+
+  graficoGanho: {
     backgroundColor: '#f2f2f2',
     borderRadius: 10,
-    paddingHorizontal: 70,
+    padding: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
+
   },
+
+  saldoGanho: {
+    color: 'green',
+    fontWeight: 'bold', 
+
+  },
+
+    graficoGasto: {
+    backgroundColor: '#f2f2f2',
+    borderRadius: 10,
+    padding: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+    saldoGasto: {
+    color: 'red',
+    fontWeight: 'bold' 
+
+  },
+
 
   extratoContainer: {
     width: '90%',
@@ -171,15 +199,15 @@ export default StyleSheet.create({
     borderRadius: 20,
     justifyContent: 'center',
     alignItems: 'center',
-    textAlign: 'center',
   },
 
   botaoTexto: {
-    fontSize: 30,
+    fontSize: 20,
     color: '#fff',
     fontWeight: 'bold',
-    textAlign: 'center',
+
   },
+
 
   modalContainer: {
   flex: 1,

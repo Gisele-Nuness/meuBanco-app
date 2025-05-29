@@ -25,18 +25,33 @@ const icons = {
 export default function Home() {
   const [modalReceitaVisible, setModalReceitaVisible] = useState(false);
   const [modalGastoVisible, setModalGastoVisible] = useState(false);
-  const [tipoGasto, setTipoGasto] = useState("refeicao");
   const [tipoReceita, setTipoReceita] = useState("salario");
   const [data, setData] = useState(new Date());
-  const [mostrarData, setMostrarData] = useState(false);
+
+    // Form state
+  const [icon, setIcon] = useState('');
+  const [tipo, setTipo] = useState('');
+  const [valor, setValor] = useState('');
+  const [status, setStatus] = useState('');
 
   const handleDateChange = (text) => {
     const [day, month, year] = text.split("/");
     const newDate = new Date(`${year}-${month}-${day}`);
     if (!isNaN(newDate)) {
       setData(newDate);
+    } else {
+      alert('Data deve estar no formato DD/MM/YYYY');
+      return;
     }
   };
+}
+
+ function adicionarItem () {
+      if (!valor || !tipo || !data) {
+      alert('Preencha todos os campos!');
+      return;
+    }
+
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -76,14 +91,22 @@ export default function Home() {
       <View style={styles.linhaDivisoria} />
 
       <View style={styles.graficosContainer}>
-        <Image
-          source={require("../../../assets/ganho.png")}
-          style={styles.grafico}
-        />
-        <Image
+        <View style={styles.graficoGanho}>
+          <Image
+            source={require("../../../assets/ganho.png")}
+            style={styles.grafico}
+          />
+          <Text style={styles.saldoGanho}>R$ 12.000,00</Text>
+        </View>
+        
+        <View style={styles.graficoGasto}>
+          <Image
           source={require("../../../assets/gasto.png")}
           style={styles.grafico}
-        />
+          />
+          <Text style={styles.saldoGasto}>R$ 2.415,00</Text>
+        </View>
+        
       </View>
 
       <View style={styles.extratoContainer}>
@@ -92,59 +115,59 @@ export default function Home() {
         {[
           {
             icon: "pessoal.png",
-            label: "Salário",
+            tipo: "Salário",
             valor: "+ R$ 5.000,00",
-            tipo: "Recebido",
+            status: "Recebido",
           },
           {
             icon: "educacao.png",
-            label: "Faculdade",
+            tipo: "Faculdade",
             valor: "- R$ 2.000,00",
-            tipo: "Pago",
+            status: "Pago",
           },
           {
             icon: "pessoal.png",
-            label: "PIX",
+            tipo: "PIX",
             valor: "+ R$ 7.000,00",
-            tipo: "Recebido",
+            status: "Recebido",
           },
           {
             icon: "refeicao.png",
-            label: "Refeição",
+            tipo: "Refeição",
             valor: "- R$ 150,00",
-            tipo: "Pago",
+            status: "Pago",
           },
           {
             icon: "saude.png",
-            label: "Saúde",
+            tipo: "Saúde",
             valor: "-R$ 250,00",
-            tipo: "Pago",
+            status: "Pago",
           },
           {
             icon: "transporte.png",
-            label: "Uber",
-            valor: "-R$ 15,00",
-            tipo: "Pago",
+            tipo: "Uber",
+            valor: 15.00,
+            status: "Pago",
           },
         ].map((item, index) => (
           <View key={index} style={styles.linhaExtrato}>
             <View style={styles.tipoIcone}>
               <Image source={icons[item.icon]} style={styles.iconeExtrato} />
 
-              <Text style={styles.extratoLabel}>{item.label}</Text>
+              <Text style={styles.extratoLabel}>{item.tipo}</Text>
             </View>
 
             <View style={styles.infoExtrato}>
               <Text
                 style={
-                  item.tipo === "Recebido"
+                  item.valor <0
                     ? styles.valorRecebido
                     : styles.valorPago
                 }
               >
                 {item.valor}
               </Text>
-              <Text style={styles.tipoExtrato}>{item.tipo}</Text>
+              <Text style={styles.tipoExtrato}>{item.status}</Text>
             </View>
           </View>
         ))}
@@ -173,12 +196,14 @@ export default function Home() {
             <TextInput
               style={styles.input}
               placeholder="Valor"
+              value={valor}
               keyboardType="numeric"
+              onChangeText={setValor}
             />
             <Text style={styles.labelInput}>Selecione o tipo:</Text>
             <Picker
               selectedValue={tipoGasto}
-              onValueChange={(itemValue) => setTipoGasto(itemValue)}
+              onValueChange={(itemValue, itemIndex) => setTipo(itemValue)}
               style={styles.input}
             >
               <Picker.Item label="Refeição" value="refeicao" />
@@ -222,7 +247,7 @@ export default function Home() {
             <Text style={styles.labelInput}>Selecione o tipo:</Text>
             <Picker
               selectedValue={tipoReceita}
-              onValueChange={(itemValue) => setTipoReceita(itemValue)}
+              onValueChange={(itemValue, itemIndex) => setTipo(itemValue)}
               style={styles.input}
             >
               <Picker.Item label="Salário" value="salario" />
