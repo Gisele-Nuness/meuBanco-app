@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -11,47 +11,105 @@ import {
   Picker,
 } from "react-native";
 import styles from "./style";
-import DateTimePicker from "@react-native-community/datetimepicker";
 
 const icons = {
   "pessoal.png": require("../../../assets/pessoal.png"),
   "educacao.png": require("../../../assets/educacao.png"),
-  "pessoal.png": require("../../../assets/pessoal.png"),
+  "lazer.png": require("../../../assets/lazer.png"),
   "refeicao.png": require("../../../assets/refeicao.png"),
   "saude.png": require("../../../assets/saude.png"),
   "transporte.png": require("../../../assets/transporte.png"),
+  "servicos.png": require("../../../assets/servicos.png"),
+  "vestuario.png": require("../../../assets/vestuario.png"),
+  "mercado.png": require("../../../assets/mercado.png"),
+  "pix.png": require("../../../assets/pix.png"),
+  "salario.png": require("../../../assets/pessoal.png"),
+  "outros.png": require("../../../assets/outros.png"),
 };
 
 export default function Home() {
   const [modalReceitaVisible, setModalReceitaVisible] = useState(false);
   const [modalGastoVisible, setModalGastoVisible] = useState(false);
-  const [tipoReceita, setTipoReceita] = useState("salario");
+  const [tipoReceita, setTipoReceita] = useState('salario');
+  const [tipoGasto, setTipoGasto] = useState('refeicao');
   const [data, setData] = useState(new Date());
 
-    // Form state
   const [icon, setIcon] = useState('');
   const [tipo, setTipo] = useState('');
   const [valor, setValor] = useState('');
   const [status, setStatus] = useState('');
 
+  const [extrato, setExtrato] = useState([]);
+  const [saldo, setSaldo] = useState(0);
+  const [totalGanhos, setTotalGanhos] = useState(0);
+  const [totalGastos, setTotalGastos] = useState(0);
+
+  useEffect(() => {
+    let ganhos = 0;
+    let gastos = 0;
+
+  extrato.forEach(item => {
+    const valorSaldo = parseFloat(
+      item.valor.replace(/[^\d,-]/g, '').replace(',', '.')
+    );
+    if (item.valor.startsWith('+')) {
+      ganhos += valorSaldo;
+    } else if (item.valor.startsWith('-')) {
+      gastos -= valorSaldo;
+    }
+  });
+
+  setTotalGanhos(ganhos);
+  setTotalGastos(gastos);
+  setSaldo(ganhos - gastos);
+}, [extrato]);
+
+  const adicionarGasto = () => {
+  if (!valor || !tipoGasto || !data) {
+    alert('Preencha todos os campos!');
+    return;
+  }
+
+  const novoItem = {
+    icon: `${tipoGasto}.png`,
+    tipo: tipoGasto.charAt(0).toUpperCase() + tipoGasto.slice(1),
+    valor: `- R$ ${parseFloat(valor).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`,
+    status: "Pago",
+  };
+
+  setExtrato(extratoAtual => [...extratoAtual, novoItem]);
+  setModalGastoVisible(false);
+  setValor('');
+  setTipoGasto('');
+};
+
+const adicionarReceita = () => {
+  if (!valor || !tipoReceita || !data) {
+    alert('Preencha todos os campos!');
+    return;
+  }
+
+  const novoItem = {
+    icon: `${tipoReceita}.png`,
+    tipo: tipoReceita.charAt(0).toUpperCase() + tipoReceita.slice(1),
+    valor: `+ R$ ${parseFloat(valor).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`,
+    status: "Recebido",
+  };
+
+  setExtrato(extratoAtual => [...extratoAtual, novoItem]);
+  setModalReceitaVisible(false);
+  setValor('');
+  setTipoReceita('');
+};
+
   const handleDateChange = (text) => {
     const [day, month, year] = text.split("/");
-    const newDate = new Date(`${year}-${month}-${day}`);
+    const newDate = new Date(`${day}-${month}-${year}`);
     if (!isNaN(newDate)) {
       setData(newDate);
-    } else {
-      alert('Data deve estar no formato DD/MM/YYYY');
-      return;
     }
+
   };
-}
-
- function adicionarItem () {
-      if (!valor || !tipo || !data) {
-      alert('Preencha todos os campos!');
-      return;
-    }
-
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -85,7 +143,7 @@ export default function Home() {
 
       <View style={styles.saldoContainer}>
         <Text style={styles.saldoTitulo}>Saldo</Text>
-        <Text style={styles.saldoValor}>R$ 10.000,00</Text>
+        <Text style={styles.saldoValor}>R$ {saldo.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</Text>
       </View>
 
       <View style={styles.linhaDivisoria} />
@@ -96,7 +154,7 @@ export default function Home() {
             source={require("../../../assets/ganho.png")}
             style={styles.grafico}
           />
-          <Text style={styles.saldoGanho}>R$ 12.000,00</Text>
+          <Text style={styles.saldoGanho}>R$ {totalGanhos.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</Text>
         </View>
         
         <View style={styles.graficoGasto}>
@@ -104,7 +162,7 @@ export default function Home() {
           source={require("../../../assets/gasto.png")}
           style={styles.grafico}
           />
-          <Text style={styles.saldoGasto}>R$ 2.415,00</Text>
+          <Text style={styles.saldoGasto}>R$ {totalGastos.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</Text>
         </View>
         
       </View>
@@ -113,6 +171,7 @@ export default function Home() {
         <Text style={styles.extratoTitulo}>Extrato</Text>
 
         {[
+          ...extrato,
           {
             icon: "pessoal.png",
             tipo: "Salário",
@@ -140,13 +199,13 @@ export default function Home() {
           {
             icon: "saude.png",
             tipo: "Saúde",
-            valor: "-R$ 250,00",
+            valor: "- R$ 250,00",
             status: "Pago",
           },
           {
             icon: "transporte.png",
             tipo: "Uber",
-            valor: 15.00,
+            valor: "-R$ 15,00",
             status: "Pago",
           },
         ].map((item, index) => (
@@ -160,7 +219,7 @@ export default function Home() {
             <View style={styles.infoExtrato}>
               <Text
                 style={
-                  item.valor <0
+                  item.status === "Recebido"
                     ? styles.valorRecebido
                     : styles.valorPago
                 }
@@ -203,7 +262,7 @@ export default function Home() {
             <Text style={styles.labelInput}>Selecione o tipo:</Text>
             <Picker
               selectedValue={tipoGasto}
-              onValueChange={(itemValue, itemIndex) => setTipo(itemValue)}
+              onValueChange={(itemValue, itemIndex) => setTipoGasto(itemValue)}
               style={styles.input}
             >
               <Picker.Item label="Refeição" value="refeicao" />
@@ -226,7 +285,7 @@ export default function Home() {
             />
             <TouchableOpacity
               style={styles.modalBotao}
-              onPress={() => setModalGastoVisible(false)}
+              onPress={adicionarGasto}
             >
               <Text style={styles.modalBotaoTexto}>Salvar</Text>
             </TouchableOpacity>
@@ -243,19 +302,17 @@ export default function Home() {
               style={styles.input}
               placeholder="Valor"
               keyboardType="numeric"
+              value={valor}
+              onChangeText={setValor}
             />
             <Text style={styles.labelInput}>Selecione o tipo:</Text>
             <Picker
               selectedValue={tipoReceita}
-              onValueChange={(itemValue, itemIndex) => setTipo(itemValue)}
+              onValueChange={(itemValue, itemIndex) => setTipoReceita(itemValue)}
               style={styles.input}
             >
               <Picker.Item label="Salário" value="salario" />
               <Picker.Item label="PIX" value="pix" />
-              <Picker.Item label="Venda" value="venda" />
-              <Picker.Item label="Rendimento" value="rendimento" />
-              <Picker.Item label="Investimento" value="investimento" />
-              <Picker.Item label="Freelance" value="freelance" />
               <Picker.Item label="Outros" value="outros" />
             </Picker>
             <Text style={styles.labelInput}>Data:</Text>
@@ -267,7 +324,7 @@ export default function Home() {
             />
             <TouchableOpacity
               style={styles.modalBotao}
-              onPress={() => setModalReceitaVisible(false)}
+              onPress={adicionarReceita}
             >
               <Text style={styles.modalBotaoTexto}>Salvar</Text>
             </TouchableOpacity>
@@ -276,4 +333,5 @@ export default function Home() {
       </Modal>
     </ScrollView>
   );
+
 }
