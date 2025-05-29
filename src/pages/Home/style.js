@@ -224,6 +224,18 @@ modalContent: {
   alignItems: 'center',
 },
 
+fechar: {
+  position: 'absolute',
+  top: 10,
+  right: 2,
+  padding: 10,
+},
+
+iconeFechar: {
+  width: 30,
+  height: 30,
+},
+
 modalTitulo: {
   fontSize: 20,
   fontWeight: 'bold',

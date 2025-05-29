@@ -9,6 +9,7 @@ import {
   Modal,
   TextInput,
   Picker,
+  Pressable,
 } from "react-native";
 import styles from "./style";
 
@@ -250,6 +251,10 @@ const adicionarReceita = () => {
       <Modal visible={modalGastoVisible} animationType="slide" transparent>
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
+            <Pressable onPress={() => setModalGastoVisible(false)} style={styles.fechar}>
+              <Image source={require("../../../assets/fechar.png")} style={styles.iconeFechar}   
+              />
+            </Pressable>
             <Text style={styles.modalTitulo}>Adicionar Gasto</Text>
             <Text style={styles.labelInput}>Valor gasto:</Text>
             <TextInput
@@ -296,6 +301,11 @@ const adicionarReceita = () => {
       <Modal visible={modalReceitaVisible} animationType="slide" transparent>
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
+            <Pressable onPress={() => setModalReceitaVisible(false)} style={styles.fechar}>
+              <Image source={require("../../../assets/fechar.png")} style={styles.iconeFechar}   
+              />
+            </Pressable>
+    
             <Text style={styles.modalTitulo}>Adicionar Receita</Text>
             <Text style={styles.labelInput}>Valor ganho:</Text>
             <TextInput
