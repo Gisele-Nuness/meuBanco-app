@@ -186,11 +186,11 @@ export default function Home() {
               <Picker.Item label="Transporte" value="transporte" />
               <Picker.Item label="Educação" value="educacao" />
               <Picker.Item label="Lazer" value="lazer" />
-              <Picker.Item label="Contas" value="contas" />
-              <Picker.Item label="Compras" value="compras" />
-              <Picker.Item label="Investimentos" value="investimentos" />
-              <Picker.Item label="Emergência" value="emergencia" />
-              <Picker.Item label="Outro" value="outro" />
+              <Picker.Item label="Mercado" value="mercado" />
+              <Picker.Item label="Vestuário" value="vestuario" />
+              <Picker.Item label="Serviços" value="servicos" />
+              <Picker.Item label="Pessoal" value="pessoal" />
+              <Picker.Item label="Outros" value="outros" />
             </Picker>
             <Text style={styles.labelInput}>Data:</Text>
             <TextInput
@@ -231,7 +231,7 @@ export default function Home() {
               <Picker.Item label="Rendimento" value="rendimento" />
               <Picker.Item label="Investimento" value="investimento" />
               <Picker.Item label="Freelance" value="freelance" />
-              <Picker.Item label="Outro" value="outro" />
+              <Picker.Item label="Outros" value="outros" />
             </Picker>
             <Text style={styles.labelInput}>Data:</Text>
             <TextInput
