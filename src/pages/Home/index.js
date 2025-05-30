@@ -34,11 +34,7 @@ export default function Home() {
   const [tipoReceita, setTipoReceita] = useState('salario');
   const [tipoGasto, setTipoGasto] = useState('refeicao');
   const [data, setData] = useState(new Date());
-
-  const [icon, setIcon] = useState('');
-  const [tipo, setTipo] = useState('');
   const [valor, setValor] = useState('');
-  const [status, setStatus] = useState('');
 
   const [extrato, setExtrato] = useState([]);
   const [saldo, setSaldo] = useState(0);
@@ -78,7 +74,7 @@ export default function Home() {
     status: "Pago",
   };
 
-  setExtrato(extratoAtual => [...extratoAtual, novoItem]);
+  setExtrato(extratoAtual => [novoItem, ...extratoAtual]);
   setModalGastoVisible(false);
   setValor('');
   setTipoGasto('');
@@ -97,7 +93,7 @@ const adicionarReceita = () => {
     status: "Recebido",
   };
 
-  setExtrato(extratoAtual => [...extratoAtual, novoItem]);
+  setExtrato(extratoAtual => [novoItem, ...extratoAtual]);
   setModalReceitaVisible(false);
   setValor('');
   setTipoReceita('');

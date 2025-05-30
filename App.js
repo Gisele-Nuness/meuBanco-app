@@ -4,17 +4,13 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import Splash from './src/pages/Splash';
 import Home from './src/pages/Home';
-/*import Login from './src/pages/Login';*/
-/*import Cadastro from './src/pages/Cadastro';*/
-
-
 
 const Stack = createNativeStackNavigator();
 export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="Home"
+        initialRouteName="Splash"
         screenOptions={{
           headerShown: false,
         }}>
