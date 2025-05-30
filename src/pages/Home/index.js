@@ -183,7 +183,7 @@ const adicionarReceita = () => {
             status: "Pago",
           },
           {
-            icon: "pessoal.png",
+            icon: "pix.png",
             tipo: "PIX",
             valor: "+ R$ 7.000,00",
             status: "Recebido",
