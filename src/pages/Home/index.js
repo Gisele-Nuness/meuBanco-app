@@ -173,6 +173,7 @@ const adicionarReceita = () => {
 
         {[
           ...extrato,
+          
           {
             icon: "pessoal.png",
             tipo: "Salário",
@@ -209,6 +210,7 @@ const adicionarReceita = () => {
             valor: "-R$ 15,00",
             status: "Pago",
           },
+          
         ].map((item, index) => (
           <View key={index} style={styles.linhaExtrato}>
             <View style={styles.tipoIcone}>
@@ -234,18 +236,18 @@ const adicionarReceita = () => {
       </View>
 
       <View style={styles.botoesContainer}>
-        <TouchableOpacity
+        <Pressable
           style={styles.botao}
           onPress={() => setModalReceitaVisible(true)}
         >
-          <Text style={styles.botaoTexto}>+</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
+          <Image source={require("../../../assets/mais.png")} style={styles.iconeBotao} />
+        </Pressable>
+        <Pressable
           style={styles.botao}
           onPress={() => setModalGastoVisible(true)}
         >
-          <Text style={styles.botaoTexto}>-</Text>
-        </TouchableOpacity>
+          <Image source={require("../../../assets/menos.png")} style={styles.iconeBotao} />
+        </Pressable>
       </View>
 
       <Modal visible={modalGastoVisible} animationType="slide" transparent>
@@ -288,12 +290,12 @@ const adicionarReceita = () => {
               onChangeText={handleDateChange}
               defaultValue={data.toLocaleDateString()}
             />
-            <TouchableOpacity
+            <Pressable
               style={styles.modalBotao}
               onPress={adicionarGasto}
             >
               <Text style={styles.modalBotaoTexto}>Salvar</Text>
-            </TouchableOpacity>
+            </Pressable>
           </View>
         </View>
       </Modal>

@@ -1,28 +1,28 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet } from "react-native";
 
 export default StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: 130,
-    backgroundColor: '#fff',
-    alignItems: 'center',
+    backgroundColor: "#fff",
+    alignItems: "center",
   },
 
   header: {
-    position: 'absolute',
+    position: "absolute",
     top: 0,
-    width: '100%',
+    width: "100%",
     height: 150,
-    backgroundColor: '#880cd4',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    flexDirection: 'row',
+    backgroundColor: "#880cd4",
+    justifyContent: "space-between",
+    alignItems: "center",
+    flexDirection: "row",
     paddingHorizontal: 20,
   },
 
   perfil: {
-    flexDirection: 'column',
-    alignItems: 'center',
+    flexDirection: "column",
+    alignItems: "center",
   },
 
   iconPerfil: {
@@ -31,14 +31,14 @@ export default StyleSheet.create({
   },
 
   texto: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 16,
     marginTop: 8,
   },
 
   icones: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     gap: 10,
   },
 
@@ -51,14 +51,14 @@ export default StyleSheet.create({
   iconNu: {
     width: 40,
     height: 40,
-    position: 'absolute',
+    position: "absolute",
     right: 10,
     top: 110,
   },
 
   saldoContainer: {
-    width: '100%',
-    alignItems: 'flex-start',
+    width: "100%",
+    alignItems: "flex-start",
     marginLeft: 40,
     marginTop: 10,
   },
@@ -70,25 +70,25 @@ export default StyleSheet.create({
 
   saldoValor: {
     fontSize: 20,
-    fontWeight: 'bold',
-    backgroundColor: '#f2f2f2',
+    fontWeight: "bold",
+    backgroundColor: "#f2f2f2",
     padding: 10,
     borderRadius: 10,
     marginVertical: 10,
   },
 
   linhaDivisoria: {
-  width: '90%',
-  height: 1,
-  backgroundColor: '#ccc',
-  marginVertical: 10,
-},
+    width: "90%",
+    height: 1,
+    backgroundColor: "#ccc",
+    marginVertical: 10,
+  },
 
   graficosContainer: {
-    width: '100%',
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexDirection: 'row',
+    width: "100%",
+    alignItems: "center",
+    justifyContent: "center",
+    flexDirection: "row",
     gap: 40,
     marginBottom: 10,
   },
@@ -100,38 +100,34 @@ export default StyleSheet.create({
   },
 
   graficoGanho: {
-    backgroundColor: '#f2f2f2',
+    backgroundColor: "#f2f2f2",
     borderRadius: 10,
     padding: 5,
-    justifyContent: 'center',
-    alignItems: 'center',
-
+    justifyContent: "center",
+    alignItems: "center",
   },
 
   saldoGanho: {
-    color: 'green',
-    fontWeight: 'bold', 
-
+    color: "green",
+    fontWeight: "bold",
   },
 
-    graficoGasto: {
-    backgroundColor: '#f2f2f2',
+  graficoGasto: {
+    backgroundColor: "#f2f2f2",
     borderRadius: 10,
     padding: 5,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
 
-    saldoGasto: {
-    color: 'red',
-    fontWeight: 'bold' 
-
+  saldoGasto: {
+    color: "red",
+    fontWeight: "bold",
   },
-
 
   extratoContainer: {
-    width: '90%',
-    backgroundColor: '#f5f5f5',
+    width: "90%",
+    backgroundColor: "#f5f5f5",
     borderRadius: 15,
     padding: 15,
     marginBottom: 30,
@@ -143,10 +139,10 @@ export default StyleSheet.create({
   },
 
   linhaExtrato: {
-    width: '100%',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    width: "100%",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
     marginVertical: 10,
   },
 
@@ -156,119 +152,107 @@ export default StyleSheet.create({
   },
 
   infoExtrato: {
-    alignItems: 'flex-start',
+    alignItems: "flex-start",
   },
 
   tipoIcone: {
-    flexDirection: 'row',
+    flexDirection: "row",
     gap: 10,
-    alignItems: 'center',
+    alignItems: "center",
   },
-  
+
   extratoLabel: {
     fontSize: 12,
-    fontWeight: '600',
+    fontWeight: "600",
   },
 
   valorRecebido: {
-    color: 'green',
-    fontWeight: 'bold',
+    color: "green",
+    fontWeight: "bold",
   },
 
   valorPago: {
-    color: 'red',
-    fontWeight: 'bold',
+    color: "red",
+    fontWeight: "bold",
   },
 
   tipoExtrato: {
     fontSize: 12,
-    color: '#666',
-    alignSelf: 'flex-end',
+    color: "#666",
+    alignSelf: "flex-end",
   },
 
   botoesContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
+    flexDirection: "row",
+    justifyContent: "center",
     gap: 30,
+    bottom: 20,
   },
 
-  botao: {
-    backgroundColor: '#880cd4',
-    width: 80,
-    height: 30,
-    borderRadius: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
+  iconeBotao: {
+    width: 60,
+    height: 60,
   },
-
-  botaoTexto: {
-    fontSize: 20,
-    color: '#fff',
-    fontWeight: 'bold',
-
-  },
-
 
   modalContainer: {
-  flex: 1,
-  justifyContent: 'center',
-  alignItems: 'center',
-  backgroundColor: 'rgba(0,0,0,0.5)',
-},
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0,0,0,0.5)",
+  },
 
-modalContent: {
-  width: '80%',
-  backgroundColor: '#fff',
-  padding: 20,
-  borderRadius: 10,
-  alignItems: 'center',
-},
+  modalContent: {
+    width: "80%",
+    backgroundColor: "#fff",
+    padding: 20,
+    borderRadius: 10,
+    alignItems: "center",
+  },
 
-fechar: {
-  position: 'absolute',
-  top: 10,
-  right: 2,
-  padding: 10,
-},
+  fechar: {
+    position: "absolute",
+    top: 10,
+    right: 2,
+    padding: 10,
+  },
 
-iconeFechar: {
-  width: 30,
-  height: 30,
-},
+  iconeFechar: {
+    width: 30,
+    height: 30,
+  },
 
-modalTitulo: {
-  fontSize: 20,
-  fontWeight: 'bold',
-  marginBottom: 20,
-},
+  modalTitulo: {
+    fontSize: 20,
+    fontWeight: "bold",
+    marginBottom: 20,
+  },
 
-labelInput: {
+  labelInput: {
     fontSize: 16,
-    alignSelf: 'flex-start',
+    alignSelf: "flex-start",
     marginBottom: 10,
-  color: '#333',
-},
+    color: "#333",
+  },
 
-input: {
-  width: '100%',
-  borderWidth: 1,
-  borderColor: '#ccc',
-  borderRadius: 8,
-  padding: 10,
-  marginBottom: 15,
-},
+  input: {
+    width: "100%",
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 8,
+    padding: 10,
+    marginBottom: 15,
+  },
 
-modalBotao: {
-  backgroundColor: '#880cd4',
-  paddingVertical: 10,
-  paddingHorizontal: 30,
-  borderRadius: 8,
-},
+  modalBotao: {
+    backgroundColor: "#880cd4",
+    paddingVertical: 10,
+    paddingHorizontal: 30,
+    borderRadius: 8,
+  },
 
-modalBotaoTexto: {
-  color: '#fff',
-  fontWeight: 'bold',
-  fontSize: 16,
-},
-
+  modalBotaoTexto: {
+    color: "#fff",
+    fontWeight: "bold",
+    fontSize: 16,
+  },
 });
