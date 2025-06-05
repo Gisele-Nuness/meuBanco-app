@@ -12,6 +12,7 @@ import {
   Pressable,
 } from "react-native";
 import styles from "./style";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const icons = {
   "pessoal.png": require("../../../assets/pessoal.png"),
@@ -31,10 +32,10 @@ const icons = {
 export default function Home() {
   const [modalReceitaVisible, setModalReceitaVisible] = useState(false);
   const [modalGastoVisible, setModalGastoVisible] = useState(false);
-  const [tipoReceita, setTipoReceita] = useState('salario');
-  const [tipoGasto, setTipoGasto] = useState('refeicao');
-  const [data, setData] = useState(new Date());
-  const [valor, setValor] = useState('');
+  const [tipoReceita, setTipoReceita] = useState("salario");
+  const [tipoGasto, setTipoGasto] = useState("refeicao");
+  const [data, setData] = useState("");
+  const [valor, setValor] = useState("");
 
   const [extrato, setExtrato] = useState([]);
   const [saldo, setSaldo] = useState(0);
@@ -45,71 +46,99 @@ export default function Home() {
     let ganhos = 0;
     let gastos = 0;
 
-  extrato.forEach(item => {
-    const valorSaldo = parseFloat(
-      item.valor.replace(/[^\d,-]/g, '').replace(',', '.')
-    );
-    if (item.valor.startsWith('+')) {
-      ganhos += valorSaldo;
-    } else if (item.valor.startsWith('-')) {
-      gastos -= valorSaldo;
-    }
-  });
+    extrato.forEach((item) => {
+      const valorSaldo = parseFloat(
+        item.valor.replace(/[^\d,-]/g, "").replace(",", ".")
+      );
+      if (item.valor.startsWith("+")) {
+        ganhos += valorSaldo;
+      } else if (item.valor.startsWith("-")) {
+        gastos -= valorSaldo;
+      }
+    });
 
-  setTotalGanhos(ganhos);
-  setTotalGastos(gastos);
-  setSaldo(ganhos - gastos);
-}, [extrato]);
+    setTotalGanhos(ganhos);
+    setTotalGastos(gastos);
+    setSaldo(ganhos - gastos);
+  }, [extrato]);
 
   const adicionarGasto = () => {
-  if (!valor || !tipoGasto || !data) {
-    alert('Preencha todos os campos!');
-    return;
-  }
-
-  const novoItem = {
-    icon: `${tipoGasto}.png`,
-    tipo: tipoGasto.charAt(0).toUpperCase() + tipoGasto.slice(1),
-    valor: `- R$ ${parseFloat(valor).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`,
-    status: "Pago",
-  };
-
-  setExtrato(extratoAtual => [novoItem, ...extratoAtual]);
-  setModalGastoVisible(false);
-  setValor('');
-  setTipoGasto('');
-};
-
-const adicionarReceita = () => {
-  if (!valor || !tipoReceita || !data) {
-    alert('Preencha todos os campos!');
-    return;
-  }
-
-  const novoItem = {
-    icon: `${tipoReceita}.png`,
-    tipo: tipoReceita.charAt(0).toUpperCase() + tipoReceita.slice(1),
-    valor: `+ R$ ${parseFloat(valor).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`,
-    status: "Recebido",
-  };
-
-  setExtrato(extratoAtual => [novoItem, ...extratoAtual]);
-  setModalReceitaVisible(false);
-  setValor('');
-  setTipoReceita('');
-};
-
-  const handleDateChange = (text) => {
-    const [day, month, year] = text.split("/");
-    const newDate = new Date(`${day}-${month}-${year}`);
-    if (!isNaN(newDate)) {
-      setData(newDate);
+    if (!valor || !tipoGasto || !data) {
+      alert("Preencha todos os campos!");
+      return;
     }
 
+    const partesData = data.split("/");
+
+    if (partesData.length !== 3) {
+      alert("Data deve estar no formato DD/MM/YYYY");
+      return;
+    }
+
+    const dia = partesData[0].padStart(2, "0");
+    const mes = partesData[1].padStart(2, "0");
+    const ano = partesData[2];
+
+    const newDate = `${dia}/${mes}/${ano}`;
+
+    const novoItem = {
+      icon: `${tipoGasto}.png`,
+      tipo: tipoGasto.charAt(0).toUpperCase() + tipoGasto.slice(1),
+      valor: `- R$ ${parseFloat(valor).toLocaleString("pt-BR", {minimumFractionDigits: 2,})}`,
+      status: "Pago",
+      data: newDate,
+    };
+
+    setExtrato((extratoAtual) => [novoItem, ...extratoAtual]);
+    setModalGastoVisible(false);
+    setValor("");
+    setTipoGasto("");
+    setData("");
+  };
+
+  const adicionarReceita = async () => {
+    if (!valor || !tipoReceita || !data) {
+      alert("Preencha todos os campos!");
+      return;
+    }
+
+    const partesData = data.split("/");
+
+    if (partesData.length !== 3) {
+      alert("Data deve estar no formato DD/MM/YYYY");
+      return;
+    }
+
+    const dia = partesData[0].padStart(2, "0");
+    const mes = partesData[1].padStart(2, "0");
+    const ano = partesData[2];
+
+    const newDate = `${dia}/${mes}/${ano}`;
+
+    const novoItem = {
+      icon: `${tipoReceita}.png`,
+      tipo: tipoReceita.charAt(0).toUpperCase() + tipoReceita.slice(1),
+      valor: `+ R$ ${parseFloat(valor).toLocaleString("pt-BR", {minimumFractionDigits: 2,})}`,
+      status: "Recebido",
+      data: newDate,
+    };
+
+    setExtrato((extratoAtual) => [novoItem, ...extratoAtual]);
+    setModalReceitaVisible(false);
+    setValor("");
+    setTipoReceita("");
+    setData("");
+
+    try {
+      await AsyncStorage.setItem("novoItem", JSON.stringify(novoItem));
+      alert("Dados salvos!!!");
+    } catch (e) {
+      alert("Erro ao salvar os dados no AsyncStorage");
+    }
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <View style={styles.container}>
       <View style={styles.header}>
         <View style={styles.perfil}>
           <Image
@@ -140,7 +169,9 @@ const adicionarReceita = () => {
 
       <View style={styles.saldoContainer}>
         <Text style={styles.saldoTitulo}>Saldo</Text>
-        <Text style={styles.saldoValor}>R$ {saldo.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</Text>
+        <Text style={styles.saldoValor}>
+          R$ {saldo.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
+        </Text>
       </View>
 
       <View style={styles.linhaDivisoria} />
@@ -151,25 +182,30 @@ const adicionarReceita = () => {
             source={require("../../../assets/ganho.png")}
             style={styles.grafico}
           />
-          <Text style={styles.saldoGanho}>R$ {totalGanhos.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</Text>
+          <Text style={styles.saldoGanho}>
+            R${" "}
+            {totalGanhos.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
+          </Text>
         </View>
-        
+
         <View style={styles.graficoGasto}>
           <Image
-          source={require("../../../assets/gasto.png")}
-          style={styles.grafico}
+            source={require("../../../assets/gasto.png")}
+            style={styles.grafico}
           />
-          <Text style={styles.saldoGasto}>R$ {totalGastos.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</Text>
+          <Text style={styles.saldoGasto}>
+            R${" "}
+            {totalGastos.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
+          </Text>
         </View>
-        
       </View>
 
-      <View style={styles.extratoContainer}>
+      <ScrollView contentContainerStyle={styles.extratoContainer}>
         <Text style={styles.extratoTitulo}>Extrato</Text>
 
         {[
           ...extrato,
-          
+
           {
             icon: "pessoal.png",
             tipo: "Salário",
@@ -206,7 +242,6 @@ const adicionarReceita = () => {
             valor: "-R$ 15,00",
             status: "Pago",
           },
-          
         ].map((item, index) => (
           <View key={index} style={styles.linhaExtrato}>
             <View style={styles.tipoIcone}>
@@ -216,6 +251,7 @@ const adicionarReceita = () => {
             </View>
 
             <View style={styles.infoExtrato}>
+              <Text style={styles.extratoData}>{item.data}</Text>
               <Text
                 style={
                   item.status === "Recebido"
@@ -229,35 +265,46 @@ const adicionarReceita = () => {
             </View>
           </View>
         ))}
-      </View>
+      </ScrollView>
 
       <View style={styles.botoesContainer}>
         <Pressable
           style={styles.botao}
           onPress={() => setModalReceitaVisible(true)}
         >
-          <Image source={require("../../../assets/mais.png")} style={styles.iconeBotao} />
+          <Image
+            source={require("../../../assets/mais.png")}
+            style={styles.iconeBotao}
+          />
         </Pressable>
         <Pressable
           style={styles.botao}
           onPress={() => setModalGastoVisible(true)}
         >
-          <Image source={require("../../../assets/menos.png")} style={styles.iconeBotao} />
+          <Image
+            source={require("../../../assets/menos.png")}
+            style={styles.iconeBotao}
+          />
         </Pressable>
       </View>
 
       <Modal visible={modalGastoVisible} animationType="slide" transparent>
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
-            <Pressable onPress={() => setModalGastoVisible(false)} style={styles.fechar}>
-              <Image source={require("../../../assets/fechar.png")} style={styles.iconeFechar}   
+            <Pressable
+              onPress={() => setModalGastoVisible(false)}
+              style={styles.fechar}
+            >
+              <Image
+                source={require("../../../assets/fechar.png")}
+                style={styles.iconeFechar}
               />
             </Pressable>
             <Text style={styles.modalTitulo}>Adicionar Gasto</Text>
             <Text style={styles.labelInput}>Valor gasto:</Text>
             <TextInput
               style={styles.input}
-              placeholder="Valor"
+              placeholder="Digite apenas números"
               value={valor}
               keyboardType="numeric"
               onChangeText={setValor}
@@ -282,14 +329,11 @@ const adicionarReceita = () => {
             <Text style={styles.labelInput}>Data:</Text>
             <TextInput
               style={styles.input}
-              placeholder="DD/MM/AAAA"
-              onChangeText={handleDateChange}
-              defaultValue={data.toLocaleDateString()}
+              placeholder="DD/MM/YYYY"
+              value={data}
+              onChangeText={setData}
             />
-            <Pressable
-              style={styles.modalBotao}
-              onPress={adicionarGasto}
-            >
+            <Pressable style={styles.modalBotao} onPress={adicionarGasto}>
               <Text style={styles.modalBotaoTexto}>Salvar</Text>
             </Pressable>
           </View>
@@ -299,16 +343,21 @@ const adicionarReceita = () => {
       <Modal visible={modalReceitaVisible} animationType="slide" transparent>
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
-            <Pressable onPress={() => setModalReceitaVisible(false)} style={styles.fechar}>
-              <Image source={require("../../../assets/fechar.png")} style={styles.iconeFechar}   
+            <Pressable
+              onPress={() => setModalReceitaVisible(false)}
+              style={styles.fechar}
+            >
+              <Image
+                source={require("../../../assets/fechar.png")}
+                style={styles.iconeFechar}
               />
             </Pressable>
-    
+
             <Text style={styles.modalTitulo}>Adicionar Receita</Text>
             <Text style={styles.labelInput}>Valor ganho:</Text>
             <TextInput
               style={styles.input}
-              placeholder="Valor"
+              placeholder="Digite apenas números"
               keyboardType="numeric"
               value={valor}
               onChangeText={setValor}
@@ -316,7 +365,9 @@ const adicionarReceita = () => {
             <Text style={styles.labelInput}>Selecione o tipo:</Text>
             <Picker
               selectedValue={tipoReceita}
-              onValueChange={(itemValue, itemIndex) => setTipoReceita(itemValue)}
+              onValueChange={(itemValue, itemIndex) =>
+                setTipoReceita(itemValue)
+              }
               style={styles.input}
             >
               <Picker.Item label="Salário" value="salario" />
@@ -326,9 +377,9 @@ const adicionarReceita = () => {
             <Text style={styles.labelInput}>Data:</Text>
             <TextInput
               style={styles.input}
-              placeholder="DD/MM/AAAA"
-              onChangeText={handleDateChange}
-              defaultValue={data.toLocaleDateString()}
+              placeholder="DD/MM/YYYY"
+              value={data}
+              onChangeText={setData}
             />
             <TouchableOpacity
               style={styles.modalBotao}
@@ -339,7 +390,6 @@ const adicionarReceita = () => {
           </View>
         </View>
       </Modal>
-    </ScrollView>
+    </View>
   );
-
 }

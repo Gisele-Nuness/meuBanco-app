@@ -6,6 +6,7 @@ export default StyleSheet.create({
     paddingTop: 130,
     backgroundColor: "#fff",
     alignItems: "center",
+    overflow: 'hidden',
   },
 
   header: {
@@ -126,7 +127,7 @@ export default StyleSheet.create({
   },
 
   extratoContainer: {
-    width: "90%",
+    width: 360,
     backgroundColor: "#f5f5f5",
     borderRadius: 15,
     padding: 15,
@@ -166,6 +167,12 @@ export default StyleSheet.create({
     fontWeight: "600",
   },
 
+  extratoData: {
+    alignSelf: "flex-end",
+    fontSize: 12,
+    color: "#666",
+  },
+
   valorRecebido: {
     color: "green",
     fontWeight: "bold",
@@ -186,7 +193,7 @@ export default StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     gap: 30,
-    bottom: 20,
+    
   },
 
   iconeBotao: {
