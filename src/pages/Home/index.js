@@ -62,24 +62,26 @@ export default function Home() {
     setSaldo(ganhos - gastos);
   }, [extrato]);
 
+  function validarEFormatarData(data) {
+  const partesData = data.split("/");
+  if (partesData.length !== 3) {
+    alert("Data deve estar no formato DD/MM/YYYY");
+    return null;
+  }
+  const dia = partesData[0].padStart(2, "0");
+  const mes = partesData[1].padStart(2, "0");
+  const ano = partesData[2];
+  return `${dia}/${mes}/${ano}`;
+  }
+
   const adicionarGasto = () => {
     if (!valor || !tipoGasto || !data) {
       alert("Preencha todos os campos!");
       return;
     }
 
-    const partesData = data.split("/");
-
-    if (partesData.length !== 3) {
-      alert("Data deve estar no formato DD/MM/YYYY");
-      return;
-    }
-
-    const dia = partesData[0].padStart(2, "0");
-    const mes = partesData[1].padStart(2, "0");
-    const ano = partesData[2];
-
-    const newDate = `${dia}/${mes}/${ano}`;
+    const newDate = validarEFormatarData(data);
+    if (!newDate) return;
 
     const novoItem = {
       icon: `${tipoGasto}.png`,
@@ -102,18 +104,9 @@ export default function Home() {
       return;
     }
 
-    const partesData = data.split("/");
+    const newDate = validarEFormatarData(data);
+    if (!newDate) return;
 
-    if (partesData.length !== 3) {
-      alert("Data deve estar no formato DD/MM/YYYY");
-      return;
-    }
-
-    const dia = partesData[0].padStart(2, "0");
-    const mes = partesData[1].padStart(2, "0");
-    const ano = partesData[2];
-
-    const newDate = `${dia}/${mes}/${ano}`;
 
     const novoItem = {
       icon: `${tipoReceita}.png`,
