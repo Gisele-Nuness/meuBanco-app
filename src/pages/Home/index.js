@@ -43,6 +43,35 @@ export default function Home() {
   const [totalGastos, setTotalGastos] = useState(0);
 
   useEffect(() => {
+    const carregarExtratoSalvo = async () => {
+      try {
+        const dadosSalvos = await AsyncStorage.getItem("extrato");
+        if (dadosSalvos !== null) {
+          setExtrato(JSON.parse(dadosSalvos));
+        }
+      } catch (e) {
+        alert("Erro ao carregar dados do AsyncStorage", e);
+      }
+    };
+
+    carregarExtratoSalvo();
+  }, []);
+
+  useEffect(() => {
+    const salvarExtrato = async () => {
+      try {
+        await AsyncStorage.setItem("extrato", JSON.stringify(extrato));
+      } catch (e) {
+        console.log("Erro ao salvar extrato no AsyncStorage", e);
+      }
+    };
+
+    if (extrato.length > 0) {
+      salvarExtrato();
+    }
+  }, [extrato]);
+
+  useEffect(() => {
     let ganhos = 0;
     let gastos = 0;
 
@@ -62,16 +91,22 @@ export default function Home() {
     setSaldo(ganhos - gastos);
   }, [extrato]);
 
-  function validarEFormatarData(data) {
-  const partesData = data.split("/");
-  if (partesData.length !== 3) {
-    alert("Data deve estar no formato DD/MM/YYYY");
-    return null;
+  const limparExtrato = async () => {
+    await AsyncStorage.removeItem("extrato");
+    setExtrato([]);
+    alert("Extrato apagado com sucesso!");
   }
-  const dia = partesData[0].padStart(2, "0");
-  const mes = partesData[1].padStart(2, "0");
-  const ano = partesData[2];
-  return `${dia}/${mes}/${ano}`;
+
+  function validarEFormatarData(data) {
+    const partesData = data.split("/");
+    if (partesData.length !== 3) {
+      alert("Data deve estar no formato DD/MM/YYYY");
+      return null;
+    }
+    const dia = partesData[0].padStart(2, "0");
+    const mes = partesData[1].padStart(2, "0");
+    const ano = partesData[2];
+    return `${dia}/${mes}/${ano}`;
   }
 
   const adicionarGasto = () => {
@@ -86,7 +121,9 @@ export default function Home() {
     const novoItem = {
       icon: `${tipoGasto}.png`,
       tipo: tipoGasto.charAt(0).toUpperCase() + tipoGasto.slice(1),
-      valor: `- R$ ${parseFloat(valor).toLocaleString("pt-BR", {minimumFractionDigits: 2,})}`,
+      valor: `- R$ ${parseFloat(valor).toLocaleString("pt-BR", {
+        minimumFractionDigits: 2,
+      })}`,
       status: "Pago",
       data: newDate,
     };
@@ -107,11 +144,12 @@ export default function Home() {
     const newDate = validarEFormatarData(data);
     if (!newDate) return;
 
-
     const novoItem = {
       icon: `${tipoReceita}.png`,
       tipo: tipoReceita.charAt(0).toUpperCase() + tipoReceita.slice(1),
-      valor: `+ R$ ${parseFloat(valor).toLocaleString("pt-BR", {minimumFractionDigits: 2,})}`,
+      valor: `+ R$ ${parseFloat(valor).toLocaleString("pt-BR", {
+        minimumFractionDigits: 2,
+      })}`,
       status: "Recebido",
       data: newDate,
     };
@@ -121,13 +159,6 @@ export default function Home() {
     setValor("");
     setTipoReceita("");
     setData("");
-
-    try {
-      await AsyncStorage.setItem("novoItem", JSON.stringify(novoItem));
-      alert("Dados salvos!!!");
-    } catch (e) {
-      alert("Erro ao salvar os dados no AsyncStorage");
-    }
   };
 
   return (
@@ -161,6 +192,13 @@ export default function Home() {
       </View>
 
       <View style={styles.saldoContainer}>
+        <Pressable style={styles.btnExcluir}
+          onPress={limparExtrato}>
+          <Image style={styles.excluirIcone}
+            source={require("../../../assets/excluir.png")}>
+          </Image>
+        </Pressable>
+
         <Text style={styles.saldoTitulo}>Saldo</Text>
         <Text style={styles.saldoValor}>
           R$ {saldo.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}

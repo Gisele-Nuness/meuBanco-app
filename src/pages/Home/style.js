@@ -64,6 +64,17 @@ export default StyleSheet.create({
     marginTop: 10,
   },
 
+  btnExcluir: {
+    position: "absolute",
+    right: 40,
+    top: 25,
+  },
+
+  excluirIcone: {
+    width: 30,
+    height: 30,
+  },
+
   saldoTitulo: {
     fontSize: 18,
     marginTop: 20,
