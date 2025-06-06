@@ -103,10 +103,16 @@ export default function Home() {
       alert("Data deve estar no formato DD/MM/YYYY");
       return null;
     }
-    const dia = partesData[0].padStart(2, "0");
-    const mes = partesData[1].padStart(2, "0");
-    const ano = partesData[2];
-    return `${dia}/${mes}/${ano}`;
+
+    const [dia, mes, ano] = partesData;
+    const dataISO = `${ano}-${mes}-${dia}T12:00:00`;
+
+    if (isNaN(new Date(dataISO))) {
+      alert("Data inválida!");
+      return null;
+    }
+
+    return dataISO;
   }
 
   const adicionarGasto = () => {
@@ -125,10 +131,10 @@ export default function Home() {
         minimumFractionDigits: 2,
       })}`,
       status: "Pago",
-      data: newDate,
+      data: newDate
     };
 
-    setExtrato((extratoAtual) => [novoItem, ...extratoAtual]);
+    setExtrato((extratoAtual) => [novoItem, ...extratoAtual].sort((a, b) => new Date(b.data) - new Date(a.data)));
     setModalGastoVisible(false);
     setValor("");
     setTipoGasto("");
@@ -154,7 +160,7 @@ export default function Home() {
       data: newDate,
     };
 
-    setExtrato((extratoAtual) => [novoItem, ...extratoAtual]);
+    setExtrato((extratoAtual) => [novoItem, ...extratoAtual].sort((a, b) => new Date(b.data) - new Date(a.data)));
     setModalReceitaVisible(false);
     setValor("");
     setTipoReceita("");
@@ -282,7 +288,7 @@ export default function Home() {
             </View>
 
             <View style={styles.infoExtrato}>
-              <Text style={styles.extratoData}>{item.data}</Text>
+              <Text style={styles.extratoData}>{new Date(item.data).toLocaleDateString("pt-BR")}</Text>
               <Text
                 style={
                   item.status === "Recebido"
