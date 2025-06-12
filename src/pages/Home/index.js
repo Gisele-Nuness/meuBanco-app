@@ -1,4 +1,4 @@
-import React from "react";
+
 import { useState, useEffect } from "react";
 import {
   View,
@@ -248,36 +248,42 @@ export default function Home() {
             tipo: "Salário",
             valor: "+ R$ 5.000,00",
             status: "Recebido",
+            data: "2023-10-01T12:00:00",
           },
           {
             icon: "educacao.png",
             tipo: "Faculdade",
             valor: "- R$ 2.000,00",
             status: "Pago",
+            data: "2023-10-02T12:00:00",
           },
           {
             icon: "pix.png",
             tipo: "PIX",
             valor: "+ R$ 7.000,00",
             status: "Recebido",
+            data: "2023-10-03T12:00:00",
           },
           {
             icon: "refeicao.png",
             tipo: "Refeição",
             valor: "- R$ 150,00",
             status: "Pago",
+            data: "2023-10-04T12:00:00",
           },
           {
             icon: "saude.png",
             tipo: "Saúde",
             valor: "- R$ 250,00",
             status: "Pago",
+            data: "2023-10-05T12:00:00",
           },
           {
             icon: "transporte.png",
             tipo: "Uber",
             valor: "-R$ 15,00",
             status: "Pago",
+            data: "2023-10-06T12:00:00",
           },
         ].map((item, index) => (
           <View key={index} style={styles.linhaExtrato}>
